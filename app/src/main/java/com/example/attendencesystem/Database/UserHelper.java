@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.attendencesystem.Database.UserContract.UserEntry;
 
@@ -11,7 +12,7 @@ import com.example.attendencesystem.Database.UserContract.UserEntry;
 
 public class UserHelper extends SQLiteOpenHelper {
 
-    String TABLE_NAME = UserContract.UserEntry.TABLE_NAME;
+    String TABLE_NAME = UserEntry.TABLE_NAME;
 
     /** Name of the database file */
     private static final String DATABASE_NAME = "User.db";
@@ -39,7 +40,7 @@ public class UserHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != newVersion) {
             // Simplest implementation is to drop all old tables and recreate them
-            db.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
             onCreate(db);
         }
     }
@@ -49,5 +50,11 @@ public class UserHelper extends SQLiteOpenHelper {
         return db.rawQuery("select * from " + UserEntry.TABLE_NAME, null);
     }
 
+    public void add_details(String u_name, String pass_helper) {
+        Log.d ("TAG", "add details");
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("update " + UserEntry.TABLE_NAME + " set " + UserEntry.COLUMN_USER_NAME + " = " + u_name +
+                UserEntry.COLUMN_USER_PASSWORD + " = " + pass_helper);
+    }
 
 }
